@@ -20,11 +20,21 @@ set -euo pipefail
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+DIM='\033[2m'
 NC='\033[0m'
 
-info() { echo -e "${GREEN}[init]${NC} $*"; }
-warn() { echo -e "${YELLOW}[init]${NC} $*"; }
-die()  { echo -e "${RED}[init] ERROR:${NC} $*" >&2; exit 1; }
+info() { echo -e "  ${GREEN}✓${NC} $*"; }
+warn() { echo -e "  ${YELLOW}!${NC} $*"; }
+die()  { echo -e "\n  ${RED}✗ $*${NC}\n" >&2; exit 1; }
+
+ask() {
+  local label="$1" hint="$2" var="$3"
+  echo -e "  ${BOLD}${label}${NC}  ${DIM}${hint}${NC}"
+  read -rp $'  \033[0;36m›\033[0m ' "$var"
+  echo ""
+}
 
 parse_args() {
   TOKEN="${TOKEN:-}"
@@ -43,17 +53,17 @@ parse_args() {
 
 prompt_missing() {
   if [ -z "$TOKEN" ]; then
-    read -rp "GitHub token (repo scope): " TOKEN
+    ask "GitHub Token" "needs repo scope" TOKEN
     [ -n "$TOKEN" ] || die "Token cannot be empty"
   fi
 
   if [ -z "$REPO" ]; then
-    read -rp "GitHub repository (e.g. owner/repo): " REPO
+    ask "Repository" "e.g. owner/repo" REPO
     [ -n "$REPO" ] || die "Repository cannot be empty"
   fi
 
   if [ -z "$ENTRYPOINT" ]; then
-    read -rp "Entrypoint script path (e.g. scripts/install.sh): " ENTRYPOINT
+    ask "Entrypoint" "e.g. scripts/install.sh" ENTRYPOINT
     [ -n "$ENTRYPOINT" ] || die "Entrypoint cannot be empty"
   fi
 }
@@ -84,7 +94,8 @@ main() {
   [ "${EUID:-$(id -u)}" -eq 0 ] || die "Run as root: sudo bash"
 
   echo ""
-  echo "  App Installer Bootstrap"
+  echo -e "  ${BOLD}App Installer Bootstrap${NC}"
+  echo -e "  ${DIM}────────────────────────${NC}"
   echo ""
 
   parse_args "$@"
@@ -101,7 +112,8 @@ main() {
   GITHUB_TOKEN="$TOKEN" bash "$tmpfile"
 }
 
-# Allow sourcing for tests without auto-executing
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+# Allow sourcing for tests without auto-executing.
+# When piped via curl, BASH_SOURCE[0] is unset — treat that as "not sourced".
+if [[ "${BASH_SOURCE[0]:-$0}" == "${0}" ]]; then
   main "$@"
 fi
