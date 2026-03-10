@@ -6,10 +6,10 @@
 # is the entrypoint's responsibility.
 #
 # Usage — interactive:
-#   curl -fsSL https://raw.githubusercontent.com/romfis91/gh-pvt-installer/main/bootstrap.sh | sudo bash
+#   curl -fsSL https://raw.githubusercontent.com/romfis91/github-private-installer/main/bootstrap.sh | sudo bash
 #
 # Usage — with arguments:
-#   curl -fsSL https://raw.githubusercontent.com/romfis91/gh-pvt-installer/main/bootstrap.sh | \
+#   curl -fsSL https://raw.githubusercontent.com/romfis91/github-private-installer/main/bootstrap.sh | \
 #     sudo bash -s -- \
 #       --token  ghp_xxx \
 #       --repo   owner/repo \

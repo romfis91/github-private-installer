@@ -1,4 +1,4 @@
-# gh-pvt-installer
+# Private Repo Installer
 
 A minimal bootstrap script that fetches and executes an installation entrypoint from a **private** GitHub repository.
 
@@ -15,7 +15,7 @@ curl bootstrap.sh → prompts for token + repo + entrypoint → downloads entryp
 ### Interactive
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/romfis91/gh-pvt-installer/main/bootstrap.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/romfis91/github-private-installer/main/bootstrap.sh | sudo bash
 ```
 
 You will be prompted for:
@@ -28,7 +28,7 @@ You will be prompted for:
 Pass all arguments via `bash -s --`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/romfis91/gh-pvt-installer/main/bootstrap.sh | \
+curl -fsSL https://raw.githubusercontent.com/romfis91/github-private-installer/main/bootstrap.sh | \
   sudo bash -s -- \
     --token  ghp_xxxxxxxxxxxx \
     --repo   owner/my-app \
