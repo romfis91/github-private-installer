@@ -32,7 +32,8 @@ die()  { echo -e "\n  ${RED}✗ $*${NC}\n" >&2; exit 1; }
 ask() {
   local label="$1" hint="$2" var="$3"
   echo -e "  ${BOLD}${label}${NC}  ${DIM}${hint}${NC}"
-  read -rp $'  \033[0;36m›\033[0m ' "$var"
+  printf "  %b›%b " "${CYAN}" "${NC}"
+  IFS= read -r "${var?}" < /dev/tty
   echo ""
 }
 
@@ -74,7 +75,7 @@ download_entrypoint() {
   info "Downloading ${entrypoint} from ${repo}..."
 
   local http_code
-  http_code=$(curl -fsSL \
+  http_code=$(curl -sSL \
     -H "Authorization: token ${token}" \
     -H "Accept: application/vnd.github.v3.raw" \
     -w "%{http_code}" \
@@ -83,6 +84,7 @@ download_entrypoint() {
 
   case "$http_code" in
     200) ;;
+    000) die "Network error — check your connection" ;;
     401) die "Authentication failed — check your token" ;;
     403) die "Access denied — token lacks repo scope" ;;
     404) die "Not found — check repo name and entrypoint path" ;;
