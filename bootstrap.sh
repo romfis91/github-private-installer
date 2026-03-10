@@ -111,7 +111,7 @@ main() {
 
   info "Handing off to entrypoint..."
   echo ""
-  GITHUB_TOKEN="$TOKEN" bash "$tmpfile"
+  GITHUB_TOKEN="$TOKEN" bash "$tmpfile" </dev/tty
 }
 
 # Allow sourcing for tests without auto-executing.
