@@ -105,7 +105,7 @@ main() {
 
   local tmpfile
   tmpfile=$(mktemp)
-  trap 'rm -f "$tmpfile"' EXIT
+  trap "rm -f '$tmpfile'" EXIT
 
   download_entrypoint "$TOKEN" "$REPO" "$ENTRYPOINT" "$tmpfile"
 
